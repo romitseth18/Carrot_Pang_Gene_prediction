@@ -88,7 +88,6 @@ ulimit ≥ 65536 (required by STAR)
 ## Workflow Diagram
 The following diagram summarizes the complete two-step pangenome annotation workflow, including ID normalization, gene extraction, and QC:
 
-```mermaid
 flowchart TD
 
     %% === INPUTS ===
@@ -102,10 +101,10 @@ flowchart TD
     A --> STAR1[STAR: Build Index]
     B --> STAR2[STAR: Align Reads → BAM]
 
-    STAR1 --> BRAKER_ET[BRAKER ET (RNA-seq guided)]
+    STAR1 --> BRAKER_ET[BRAKER ET - RNA-seq guided]
     STAR2 --> BRAKER_ET
 
-    C --> BRAKER_EP[BRAKER EP (protein guided)]
+    C --> BRAKER_EP[BRAKER EP - protein guided]
 
     BRAKER_ET --> TSEBRA[TSEBRA Model Selection]
     BRAKER_EP --> TSEBRA
@@ -139,7 +138,7 @@ flowchart TD
     EXTRACT_GENES --> OUT4[Genes FNA]
     EXTRACT_CDS --> OUT5[CDS FNA]
     EXTRACT_PROT --> OUT6[Proteins FAA]
-```
+
 
 
 
