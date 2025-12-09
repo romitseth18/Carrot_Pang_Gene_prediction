@@ -89,59 +89,57 @@ ulimit ≥ 65536 (required by STAR)
 The following diagram summarizes the complete two-step pangenome annotation workflow, including ID normalization, gene extraction, and QC:
 
 ```mermaid
-[flowchart TD
+flowchart TD
 
-    %% STYLE
-    classDef step fill:#f4f4f4,stroke:#333,stroke-width:1px,border-radius:4px;
-    classDef tool fill:#e8f0ff,stroke:#3366cc,stroke-width:1px,border-radius:4px;
-    classDef out fill:#eaffea,stroke:#228b22,stroke-width:1px,border-radius:4px;
+    %% === INPUTS ===
+    A[Softmasked Genomes] 
+    B[RNA-seq Reads R1/R2]
+    C[SwissProt Proteins]
+    D[DCv3 Genome + GFF3]
+    E[TSEBRA Config]
 
-    %% INPUTS
-    A[Softmasked Genomes (*.softmasked.fasta)]:::step
-    B[RNA-seq R1/R2 reads]:::step
-    C[SwissProt proteins]:::step
-    D[DCv3 genome + GFF3]:::step
-    E[TSEBRA config]:::step
+    %% === STEP 1 ANNOTATION ===
+    A --> STAR1[STAR: Build Index]
+    B --> STAR2[STAR: Align Reads → BAM]
 
-    %% STEP 1: ANNOTATION PIPELINE
-    A --> STAR1[Build STAR Index]:::tool
-    B --> STAR2[STAR Alignment → sorted BAM]:::tool
-    STAR1 --> BRAKER_ET[BRAKER ET (RNA-seq guided)]:::tool
+    STAR1 --> BRAKER_ET[BRAKER ET (RNA-seq guided)]
     STAR2 --> BRAKER_ET
 
-    C --> BRAKER_EP[BRAKER EP (protein homology)]:::tool
+    C --> BRAKER_EP[BRAKER EP (protein guided)]
 
-    BRAKER_ET --> TSEBRA[TSEBRA Model Selection]:::tool
+    BRAKER_ET --> TSEBRA[TSEBRA Model Selection]
     BRAKER_EP --> TSEBRA
 
-    D --> LIFTOFF[Liftoff: Reference-guided Projection]:::tool
+    D --> LIFTOFF[Liftoff: Reference Projection]
 
-    TSEBRA --> MERGE[AGAT Merge (TSEBRA + Liftoff)]:::tool
+    TSEBRA --> MERGE[AGAT: Merge Models]
     LIFTOFF --> MERGE
 
-    MERGE --> POLISH[AGAT Fixes (codons, consistency)]:::tool
-    POLISH --> CHR[Chromosome filtering (Chr1–9)]:::tool
+    MERGE --> POLISH[AGAT: Add start/stop codons]
+    POLISH --> CHR[Filter Chr1–9]
 
-    CHR --> OUT1[Final annotation → *.gff]:::out
-    CHR --> OUT2[Stats → *.tsv]:::out
+    CHR --> OUT1[Final Annotation (*.gff)]
+    CHR --> OUT2[Statistics (*.tsv)]
 
-    %% STEP 2: RENAMING + SEQUENCE EXTRACTION
-    OUT1 --> CLEAN[Normalize + convert to standard GFF]:::tool
-    CLEAN --> RENAME[Python: Filter masked genes + Rename IDs sequentially]:::tool
+    %% === STEP 2 RENAME + EXTRACTION ===
+    OUT1 --> CLEAN[Convert + Normalize GFF]
 
-    RENAME --> VALIDATE[Python: Validate GFF–FASTA consistency]:::tool
+    CLEAN --> RENAME[Python: Rename Sequential Gene IDs]
+    RENAME --> VALIDATE[Python: Validate GFF vs FASTA]
 
-    RENAME --> EXTRACT_GENES[AGAT Extract gene sequences]:::tool
-    RENAME --> EXTRACT_CDS[AGAT Extract CDS sequences]:::tool
-    RENAME --> EXTRACT_PROT[AGAT Extract Protein sequences]:::tool
+    RENAME --> EXTRACT_GENES[Extract Gene Sequences]
+    RENAME --> EXTRACT_CDS[Extract CDS Sequences]
+    RENAME --> EXTRACT_PROT[Extract Protein Sequences]
 
-    EXTRACT_GENES --> QC1[Compute QC metrics\n(Counts + Avg length)]:::tool
-    EXTRACT_CDS --> QC1
-    EXTRACT_PROT --> QC1
+    EXTRACT_GENES --> QC[QC Metrics]
+    EXTRACT_CDS --> QC
+    EXTRACT_PROT --> QC
 
-    QC1 --> OUT3[QC Summary CSV]:::out
-    EXTRACT_GENES --> OUT4[*.fna (genes)]:::out
-    EXTRACT_CDS --> OUT5[*.cds.fna]:::out
-    EXTRACT_PROT --> OUT6[*.faa]:::out
+    QC --> OUT3[QC Summary CSV]
+    EXTRACT_GENES --> OUT4[Genes FNA]
+    EXTRACT_CDS --> OUT5[CDS FNA]
+    EXTRACT_PROT --> OUT6[Proteins FAA]
+```
+
 
 
