@@ -1,4 +1,5 @@
 **Carrot Pangenome Annotation Pipeline**
+
 **Step 1: 01_STAR_braker_lift_ss.sh**
 This repository contains a automated workflow for structural gene annotation across multiple carrot genomes (haplotype-resolved assemblies). The pipeline integrates RNA-seq–guided prediction (BRAKER ET), protein-homology–guided prediction (BRAKER EP), evidence reconciliation with TSEBRA, reference-guided projection with Liftoff, and final merging, polishing, and diagnostics via AGAT.
 The script is intended for large-scale pangenomic annotation where each genome is processed identically and independently.
@@ -81,13 +82,12 @@ ulimit ≥ 65536 (required by STAR)
 
 
 **Step  2: 02_rename_gff_ID_gene_extraction.sh :: GFF ID Renaming & Gene/CDS/Protein Extraction**
-
 This step performs post-processing and normalization of genome annotations generated in Step 1 (BRAKER ET, BRAKER EP, TSEBRA, Liftoff, AGAT merge).
 The script standardizes GFF identifiers, validates compatibility with the genome FASTA, extracts gene/CDS/protein sequences, and produces a QC report for downstream pangenome integration.
 
 **Overview**
-
 02_rename_gff_ID_gene_extraction.sh automates the following tasks:
+
 _**Prefix normalization**_
 Ensures consistent identifiers across assemblies (e.g., PG4_H1, PG6_H2, B123).
 
@@ -99,7 +99,6 @@ Uses Python scripts to:
 Remove masked/invalid models
 
 _**Assign strict sequential gene and transcript IDs**_
-
 Validate feature boundaries against the genome FASTA
 FASTA sanitation
 Rewraps line lengths to 60 bp
@@ -124,23 +123,20 @@ Place all final annotations from Step 1 in the working directory:
 *.gff
 
 2. Genome FASTA files
-
 Expected path structure (editable inside script):
-/home/wolftech/rseth2/data/02_EC/01_EC_GFF_PROTEINS/fasta/EC_<GenomeName>.fasta
+/home/wolftech/rseth2/data/02_EC/01_EC_GFF_PROTEINS/fasta/EC_<GenomeName>.fasta  #Change the path according to data
 The <GenomeName> is automatically parsed from the GFF filename.
 
 3. Python support scripts
 Required:
 filter_and_rename_gff.py
 validate_fasta_gff.py
+Both must reside in your working dir. 
 
-Both must reside in:
-/home/wolftech/rseth2/rst/Scripts/Pangenome/sequential_gene_extraction/ ##Change it according to your working dir
 
 Output
 All processed annotations and extracted sequences are written to:
 01_rename_cds_pep_gff/
-
 
 ## Workflow Diagram
 The following diagram summarizes the complete two-step pangenome annotation workflow, including ID normalization, gene extraction, and QC:
