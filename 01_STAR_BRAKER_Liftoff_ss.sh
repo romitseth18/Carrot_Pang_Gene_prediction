@@ -8,16 +8,16 @@ BRAKER_THREADS=24
 # Paths
 GENOME_DIR="./"                          # Folder with *.softmasked.fasta
 FASTQ_DIR="/home/wolftech/rseth2/pang/RNA-Seq/02_Filtered_reads"                            # PG2_R1.fastq.gz, PG2_R2.fastq.gz
-PROTEINS="/home/wolftech/rseth2/data/blastdb/swissprot/sp.fa"
-BRAKER_SCRIPT="/home/wolftech/rseth2/tools/BRAKER/scripts/braker.pl"
-TSEBRA_SCRIPT="/home/wolftech/rseth2/tools/BRAKER/TSEBRA/bin/tsebra.py"
-REF_GFF="/home/wolftech/rseth2/tools/chromeister/bin/DCv3.gff3"
-REF_GENOME="/home/wolftech/rseth2/tools/chromeister/bin/DCv3.fa"
-tsebra_cfg="/home/wolftech/rseth2/tools/BRAKER/TSEBRA/config/tsebra.cfg"
+PROTEINS="/home/wolftech/rseth2/data/blastdb/swissprot/sp.fa"          # Add the path to swissprot file
+BRAKER_SCRIPT="/home/wolftech/rseth2/tools/BRAKER/scripts/braker.pl"    # Modify the path to braker.pl
+TSEBRA_SCRIPT="/home/wolftech/rseth2/tools/BRAKER/TSEBRA/bin/tsebra.py" # Modify the path to tsebra.py
+REF_GFF="/home/wolftech/rseth2/tools/chromeister/bin/DCv3.gff3"    # Add the path to reference gff      
+REF_GENOME="/home/wolftech/rseth2/tools/chromeister/bin/DCv3.fa"   # Add the path to your reference genome
+tsebra_cfg="/home/wolftech/rseth2/tools/BRAKER/TSEBRA/config/tsebra.cfg"  # Path to tsebra.cfg
 
 # Optional paths for BRAKER
-export GENEMARK_PATH="/home/wolftech/rseth2/tools/BRAKER/gmes_linux_64"
-export PROTHINT_PATH="/home/wolftech/rseth2/tools/BRAKER/gmes_linux_64/ProtHint/bin"
+export GENEMARK_PATH="/home/wolftech/rseth2/tools/BRAKER/gmes_linux_64"   # Modify the ath to genemark
+export PROTHINT_PATH="/home/wolftech/rseth2/tools/BRAKER/gmes_linux_64/ProtHint/bin" # Modify the ath to ProtHint
 
 # Increase open file limit (for STAR temporary BAM sorting)
 ulimit -n 65536
